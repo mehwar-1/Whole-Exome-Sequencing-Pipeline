@@ -1,0 +1,30 @@
+# Nextflow
+work/
+results/
+.nextflow*
+*.log
+null/
+
+# Data (never commit)
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.bam
+*.bai
+*.cram
+*.crai
+*.vcf
+*.vcf.gz
+*.tbi
+*.fa
+*.fasta
+*.fa.gz
+*.2bit
+
+# Small test files go under tests/data (add with git add -f when needed)
+
+# Environment
+.DS_Store
+.vscode/
+__pycache__/
