@@ -1,0 +1,12 @@
+# Large data and pipeline outputs: never commit these
+data/
+results/
+work/
+.nextflow*
+*.bam
+*.fastq.gz
+*.vcf.gz
+
+# Editor and system files
+.vscode/
+.DS_Store
