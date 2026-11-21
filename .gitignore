@@ -1,12 +1,31 @@
-# Large data and pipeline outputs: never commit these
-data/
-results/
+# Nextflow
 work/
+results/
+data/
 .nextflow*
-*.bam
-*.fastq.gz
-*.vcf.gz
+*.log
+null/
 
-# Editor and system files
-.vscode/
+# Data (never commit)
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.bam
+*.bai
+*.cram
+*.crai
+*.vcf
+*.vcf.gz
+*.tbi
+*.fa
+*.fasta
+*.fa.gz
+*.2bit
+
+# Small test files go under tests/data (add with git add -f when needed)
+
+# Environment
 .DS_Store
+.vscode/
+__pycache__/
