@@ -117,6 +117,25 @@ process GATK_DICT {
     """
 }
 
+process GATK_HAPLOTYPECALLER {
+    tag "$sample"
+    publishDir "${params.outdir}/variants", mode: 'copy'
+    container 'community.wave.seqera.io/library/gatk4-lite:4.7.0.0--79918b8b2632f4b1'
+
+    input:
+    tuple val(sample), path(bam), path(bai)
+    tuple path(fasta), path(fai), path(dict)
+
+    output:
+    tuple val(sample), path("${sample}.vcf.gz"), path("${sample}.vcf.gz.tbi")
+
+    script:
+    """
+    gatk --java-options "-Xmx2g -XX:-UsePerfData" HaplotypeCaller \
+        -R ${fasta} -I ${bam} -O ${sample}.vcf.gz
+    """
+}
+
 workflow {
     Channel.fromFilePairs(params.reads, checkIfExists: true)
         .map { sample, files -> tuple(sample, files[0], files[1]) }
@@ -128,4 +147,11 @@ workflow {
     GATK_MARKDUP(BWAMEM2_MEM.out[0])
     SAMTOOLS_FAIDX(file(params.ref))
     GATK_DICT(file(params.ref))
+
+    // Reference travels as one bundle: FASTA + index + dictionary
+    ref_ch = SAMTOOLS_FAIDX.out
+        .combine(GATK_DICT.out)
+        .map { fai, dict -> tuple(file(params.ref), fai, dict) }
+
+    GATK_HAPLOTYPECALLER(GATK_MARKDUP.out[0], ref_ch)
 }
